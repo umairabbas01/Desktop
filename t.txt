@@ -1,0 +1,6 @@
+10pm : 12am node
+12am : 2am js
+
+6 to 7 repeat
+
+9 to 11 sql + express

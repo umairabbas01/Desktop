@@ -1,0 +1,83 @@
+1xx  
+100     continous   	 continous the connection for receiving complete message body using requests
+
+
+
+		2xx  The request was sucessful
+
+200        ok            Request was sucessful and the respone body contains the result of the request.
+201        Create 	 Is returned in respond to a PUT  request to a PUT request to indicate that the request was sucessful.
+	
+
+		3xx---The client is redirected to a different resources.
+
+301        Moved Permenttly	Redirects to a differrnt URL, Using Location header.(Use New URL) 
+302	   Found		Redirects to different URL, Using Location header.(revert to the original URL in subsequent requests)
+304	   Not Modified		Instructs the broswer to use its cache copy of the requested  resource. (If modified-since & if- None-Match).
+
+
+		4Xx ---- The request  contains an error of some kind
+
+400 	Bad Request 		Indicate that the client submitted an invalid HTTP request.
+401     Unauthorize		Indicates that the server requires HTTP aunthentication before the request will be granted.
+403     Forbidden 		Indicates that no one is allowed to access the requested resources, regardless of authentication
+404	Not Found		Indicates that the requested resources does not exit.
+405 	Method Not Allowed	Indicates that the method used in the request is not supported for the specified URL.
+413 	Request Enity Too Large   This Indicates that the body of your request os too large for the server to handle. (buffer overflow).
+414	Request URL too long		It indicates that the URL used in the request is too large for the server to handle
+
+
+	5xx-- The server encountered an error fulfilling the request.
+500 	Internal Server Error      Indicates that the server encountered an error fulfilling the request. error somewhere within the application's processing.
+503      Services Unavaliable       The application accessed via the server is not responding.You should verify whether this is the result of any action you have performed.
+
+
+
+
+
+
+
+
+export const hashPassword = async (pwd) => {
+    const salt = await bcrypt.genSalt(SALT_ROUNDS);
+    return await bcrypt.hash(pwd, salt);
+};
+
+export const comparePassword = async (pwd, existingPwd) => {
+    return await bcrypt.compare(pwd, existingPwd);
+};
+
+
+
+
+
+
+
+export const loginStudent = async (req, res) => {
+    try {
+        const { email, password: inputPassword } = req.body;
+
+      
+        const student = await Student.findOne({ where: { email } });
+        if (!student) {
+            return res.status(404).json({ error: 'Student not found' });
+        }
+
+       
+        const isPasswordMatch = await comparePassword(inputPassword, student.password);
+
+        if (isPasswordMatch) {
+            res.json({ success: true, message: 'Password match successful' });
+        } else {
+            res.status(401).json({ success: false, message: 'Password not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to validate password', details: error.message });
+    }
+};
+
+
+
+
+
+

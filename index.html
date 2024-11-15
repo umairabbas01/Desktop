@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Like Button</title>
+</head>
+<body>
+<center>
+  <button id="likeButton">Like</button>
+  <p id="likeCount">0</p>
+</center> 
+  <script>
+    let likeCount = 0;
+    let increment = true;
+
+    document.getElementById("likeButton").addEventListener("click", function() {
+     
+      if (increment) {
+        if (likeCount < 10) {
+          likeCount += 1;
+        }
+        if (likeCount === 10) {
+          increment = false; 
+        }
+      } 
+     
+      else {
+        if (likeCount > 0) {
+          likeCount -= 1;
+        }
+        if (likeCount === 0) {
+          increment = true;
+        }
+      }
+      
+      
+      document.getElementById("likeCount").textContent = likeCount;
+    });
+  </script>
+
+</body>
+</html>
